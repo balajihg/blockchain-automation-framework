@@ -39,10 +39,10 @@ spec:
       address: orderer3.hgrnd-net:7050
     chaincode:
       builder: hyperledger/fabric-ccenv:2.2.2
-      name: assettransfer
+      name: asset-transfer-basic
       version: 1.1
       lang: golang
-      maindirectory: hgassetdemo
+      maindirectory: chaincode-go
       repository:
         hostname: "github.com"
         git_username: "balajihg"
