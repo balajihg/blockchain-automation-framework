@@ -1,0 +1,52 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: chaincode-install-hgpeer1-peer0-1-1
+  namespace: hgpeer1-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: chaincode-install-hgpeer1-peer0-1-1
+  chart:
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+    path: platforms/hyperledger-fabric/charts/install_chaincode
+  values:
+    metadata:
+      namespace: hgpeer1-net
+      network:
+        version: 2.2.2
+      images:
+        fabrictools: hyperledger/fabric-tools:2.2.2
+        alpineutils: index.docker.io/hyperledgerlabs/alpine-utils:1.0
+    peer:
+      name: peer0
+      address: peer0.hgpeer1-net:7051
+      localmspid: hgpeer1MSP
+      loglevel: debug
+      tlsstatus: true
+    vault:
+      role: vault-role
+      address: http://dev1.vaultservice.hyperrnd.com
+      authpath: devhgpeer1-net-auth
+      adminsecretprefix: fabric7/crypto/peerOrganizations/hgpeer1-net/users/admin 
+      orderersecretprefix: fabric7/crypto/peerOrganizations/hgpeer1-net/orderer
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+      secretgitprivatekey: fabric7/credentials/hgpeer1-net/git?git_password
+      tls: false
+    orderer:
+      address: orderer3.hgrnd-net:7050
+    chaincode:
+      builder: hyperledger/fabric-ccenv:2.2.2
+      name: assettransfer
+      version: 1.1
+      lang: golang
+      maindirectory: hgassetdemo
+      repository:
+        hostname: "github.com"
+        git_username: "balajihg"
+        url: github.com/hyperledger/fabric-samples
+        branch: main
+        path: asset-transfer-basic/chaincode-go
+      endorsementpolicies:  ''
