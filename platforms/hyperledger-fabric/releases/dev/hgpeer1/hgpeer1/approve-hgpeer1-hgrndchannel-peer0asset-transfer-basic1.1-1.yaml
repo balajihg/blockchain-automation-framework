@@ -1,0 +1,45 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: approve-hgpeer1-hgrndchannel-peer0asset-transfer-basic1.1-1
+  namespace: hgpeer1-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: approve-hgpeer1-hgrndchannel-peer0asset-transfer-basic1.1-1
+  chart:
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+    path: platforms/hyperledger-fabric/charts/approve_chaincode
+  values:
+    metadata:
+      namespace: hgpeer1-net
+      images:
+        fabrictools: hyperledger/fabric-tools:2.2.2
+        alpineutils: index.docker.io/hyperledgerlabs/alpine-utils:1.0
+    peer:
+      name: peer0
+      address: peer0.hgpeer1-net:7051
+      localmspid: hgpeer1MSP
+      loglevel: debug
+      tlsstatus: true
+    vault:
+      role: vault-role
+      address: http://dev1.vaultservice.hyperrnd.com
+      authpath: devhgpeer1-net-auth
+      adminsecretprefix: secret/crypto/peerOrganizations/hgpeer1-net/users/admin 
+      orderersecretprefix: secret/crypto/peerOrganizations/hgpeer1-net/orderer
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+      tls: false
+    orderer:
+      address: orderer1.hgrnd-net:7050
+    chaincode:
+      builder: hyperledger/fabric-ccenv:2.2.2
+      name: asset-transfer-basic
+      version: 1.1
+      sequence: 1
+      commitarguments: '{"function":"InitLedger","Args":[]}'
+      endorsementpolicies:  ''
+    channel:
+      name: hgrndchannel
