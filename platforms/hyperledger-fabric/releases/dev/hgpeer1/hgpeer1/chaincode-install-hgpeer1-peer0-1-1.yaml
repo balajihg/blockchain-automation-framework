@@ -39,14 +39,14 @@ spec:
       address: orderer3.hgrnd-net:7050
     chaincode:
       builder: hyperledger/fabric-ccenv:2.2.2
-      name: asset-transfer-basic
+      name: magnetocorp
       version: 1.1
-      lang: golang
-      maindirectory: chaincode-go
+      lang: node
+      maindirectory: contract
       repository:
-        hostname: "github.com"
+        hostname: "git@github.com"
         git_username: "balajihg"
-        url: github.com/hyperledger/fabric-samples
+        url: git@github.com/hyperledger/fabric-samples
         branch: main
-        path: asset-transfer-basic/chaincode-go
+        path: commercial-paper/organization
       endorsementpolicies:  ''
