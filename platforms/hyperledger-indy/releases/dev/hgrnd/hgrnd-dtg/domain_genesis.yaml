@@ -1,0 +1,24 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: hgrnd-dtg
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: hgrnd-ns
+spec:
+  releaseName: hgrnd-dtg
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-domain-genesis
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+  values:
+    metadata:
+      name: hgrnd-dtg
+      namespace: hgrnd-ns
+    organization:
+      name: hgrnd
+    configmap:
+      domainGenesis: |-
+        {"reqSignature":{},"txn":{"data":{"alias":"hgrnd-trustee","dest":"TXEZUQryZTqB1kEbw3TZnq","role":"0","verkey":"FTPbx6NgHqL7bHmFErL7Azp22Y9PNk3sqsBYmKuTgHjD"},"metadata":{},"type":"1"},"txnMetadata":{"seqNo":1},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"hgrnd-steward-1","dest":"rExUB3dUdAhyqU5goXyw5","role":"2","verkey":"TqbQp21hzgUs91R8aNQRytxQxpvUn4TcCV2FzDjic7v"},"metadata":{"from":"TXEZUQryZTqB1kEbw3TZnq"},"type":"1"},"txnMetadata":{"seqNo":2},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"alias":"hgrnd-steward-2","dest":"V3BBqV7a74u2G2DQhEaxJg","role":"2","verkey":"GHKcpkEfAhX2Y7LL5WcK2ctYSuZhd4dDRs9XMzLyTsSc"},"metadata":{"from":"TXEZUQryZTqB1kEbw3TZnq"},"type":"1"},"txnMetadata":{"seqNo":3},"ver":"1"}
