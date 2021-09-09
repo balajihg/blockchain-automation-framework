@@ -33,7 +33,7 @@ spec:
     vault:
       role: vault-role
       address: http://dev1.vaultservice.hyperrnd.com
-      authpath: devhgrnd-net-auth
+      authpath: dev2hgrnd-net-auth
       secretcert: fabric8/crypto/ordererOrganizations/hgrnd-net/ca?ca.hgrnd-net-cert.pem
       secretkey: fabric8/crypto/ordererOrganizations/hgrnd-net/ca?hgrnd-net-CA.key
       secretadminpass: fabric8/credentials/hgrnd-net/ca/hgrnd?user
