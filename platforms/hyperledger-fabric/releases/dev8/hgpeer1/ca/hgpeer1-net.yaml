@@ -34,7 +34,7 @@ spec:
     vault:
       role: vault-role
       address: http://dev1.vaultservice.hyperrnd.com
-      authpath: devhgpeer1-net-auth
+      authpath: dev2hgpeer1-net-auth
       secretcert: fabric8/crypto/peerOrganizations/hgpeer1-net/ca?ca.hgpeer1-net-cert.pem
       secretkey: fabric8/crypto/peerOrganizations/hgpeer1-net/ca?hgpeer1-net-CA.key
       secretadminpass: fabric8/credentials/hgpeer1-net/ca/hgpeer1?user
