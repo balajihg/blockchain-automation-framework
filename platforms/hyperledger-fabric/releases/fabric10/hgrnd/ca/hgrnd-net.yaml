@@ -1,0 +1,50 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: hgrnd-net-ca
+  namespace: hgrnd-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: hgrnd-net-ca
+  chart:
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+    path: platforms/hyperledger-fabric/charts/ca    
+  values:
+    deployment:
+      annotations:
+    annotations:  
+      service:
+        - example1: example2
+      pvc:
+    metadata:
+      namespace: hgrnd-net
+      images:
+        alpineutils: index.docker.io/hyperledgerlabs/alpine-utils:1.0
+        ca: hyperledger/fabric-ca:1.4.8
+    server:
+      name: ca
+      tlsstatus: true
+      admin: hgrnd-admin
+    storage:
+      storageclassname: hgrndsc
+      storagesize: 512Mi 
+    vault:
+      role: vault-role
+      address: http://dev1.vaultservice.hyperrnd.com
+      authpath: fabric10hgrnd-net-auth
+      secretcert: fabric10/crypto/ordererOrganizations/hgrnd-net/ca?ca.hgrnd-net-cert.pem
+      secretkey: fabric10/crypto/ordererOrganizations/hgrnd-net/ca?hgrnd-net-CA.key
+      secretadminpass: fabric10/credentials/hgrnd-net/ca/hgrnd?user
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+    service:
+      servicetype: ClusterIP
+      ports:
+        tcp:
+          port: 7054
+    proxy:
+      provider: haproxy
+      type: orderer
+      external_url_suffix: fabric10.fabrictest.hyperrnd.com
