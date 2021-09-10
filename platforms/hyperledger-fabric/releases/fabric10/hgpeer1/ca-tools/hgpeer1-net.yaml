@@ -1,0 +1,32 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: hgpeer1-net-ca-tools
+  namespace: hgpeer1-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: hgpeer1-net-ca-tools
+  chart:
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+    path: platforms/hyperledger-fabric/charts/catools
+  values:
+    metadata:
+      namespace: hgpeer1-net
+      name: ca-tools
+    annotations:  
+      service:
+        - example1: example2
+      pvc:
+      deployment:
+    replicaCount: 1
+
+    image:
+      repository: hyperledger/fabric-ca-tools
+      tag: 1.2.1
+      pullPolicy: IfNotPresent
+      
+    storage:
+      storageclassname: hgpeer1sc
+      storagesize: 512Mi
