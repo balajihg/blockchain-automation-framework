@@ -1,0 +1,49 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: anchorpeer-hgrndchannel-hgpeer1
+  namespace: hgpeer1-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: anchorpeer-hgrndchannel-hgpeer1
+  chart:
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+    path: platforms/hyperledger-fabric/charts/anchorpeer
+  values:
+    metadata:
+      namespace: hgpeer1-net
+      images:
+        fabrictools: hyperledger/fabric-tools:2.2.2
+        alpineutils: index.docker.io/hyperledgerlabs/alpine-utils:1.0
+
+    peer:
+      name: peer0
+      address: peer0.hgpeer1-net:7051
+      localmspid: hgpeer1MSP
+      loglevel: debug
+      tlsstatus: true
+
+    vault:
+      role: vault-role
+      address: http://dev1.vaultservice.hyperrnd.com
+      authpath: fabric10hgpeer1-net-auth
+      adminsecretprefix: fabric10/crypto/peerOrganizations/hgpeer1-net/users/admin
+      orderersecretprefix: fabric10/crypto/peerOrganizations/hgpeer1-net/orderer
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+
+    channel:
+      name: hgrndchannel      
+    orderer:
+      address: orderer1.hgrnd-net:7050
+    anchorstx: |-
+      Ct0CChoKGAgCGgYIzcjtiQYiDGhncm5kY2hhbm5lbBK+Agq7AgoMaGdybmRjaGFubmVsEmMSYQoL
+      QXBwbGljYXRpb24SUggBEk4KCmhncGVlcjFNU1ASQBoHCgNNU1ASACILCgdXcml0ZXJzEgAiCgoG
+      QWRtaW5zEgAiDwoLRW5kb3JzZW1lbnQSACILCgdSZWFkZXJzEgAaxQESwgEKC0FwcGxpY2F0aW9u
+      ErIBCAESrQEKCmhncGVlcjFNU1ASngEIARpSCgtBbmNob3JQZWVycxJDEjkKNwoycGVlcjAuaGdw
+      ZWVyMS1uZXQuZmFicmljMTAuZmFicmljdGVzdC5oeXBlcnJuZC5jb20Q+0EaBkFkbWlucxoHCgNN
+      U1ASACILCgdXcml0ZXJzEgAiCgoGQWRtaW5zEgAiDwoLRW5kb3JzZW1lbnQSACILCgdSZWFkZXJz
+      EgAqBkFkbWlucw==
+
