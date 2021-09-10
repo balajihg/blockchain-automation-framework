@@ -1,0 +1,51 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: hgpeer1-net-ca
+  namespace: hgpeer1-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: hgpeer1-net-ca
+  chart:
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+    path: platforms/hyperledger-fabric/charts/ca    
+  values:
+    metadata:
+      namespace: hgpeer1-net
+      images:
+        alpineutils: index.docker.io/hyperledgerlabs/alpine-utils:1.0
+        ca: hyperledger/fabric-ca:1.4.8
+    deployment:
+      annotations:
+    annotations:  
+      service:
+        - example1: example2
+      pvc:
+       
+    server:
+      name: ca
+      tlsstatus: true
+      admin: hgpeer1-admin
+    storage:
+      storageclassname: hgpeer1sc
+      storagesize: 512Mi
+    vault:
+      role: vault-role
+      address: http://dev1.vaultservice.hyperrnd.com
+      authpath: fabric10hgpeer1-net-auth
+      secretcert: fabric10/crypto/peerOrganizations/hgpeer1-net/ca?ca.hgpeer1-net-cert.pem
+      secretkey: fabric10/crypto/peerOrganizations/hgpeer1-net/ca?hgpeer1-net-CA.key
+      secretadminpass: fabric10/credentials/hgpeer1-net/ca/hgpeer1?user
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+    service:
+      servicetype: ClusterIP
+      ports:
+        tcp:
+          port: 7054
+    proxy:
+      provider: haproxy
+      type: peer
+      external_url_suffix: fabric10.fabrictest.hyperrnd.com
