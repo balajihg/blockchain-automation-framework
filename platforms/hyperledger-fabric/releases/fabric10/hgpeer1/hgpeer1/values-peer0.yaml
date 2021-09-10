@@ -1,0 +1,68 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: hgpeer1-peer0
+  namespace: hgpeer1-net
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: hgpeer1-peer0
+  chart:
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+    path: platforms/hyperledger-fabric/charts/peernode    
+  values:
+    metadata:
+      namespace: hgpeer1-net
+      images:
+        couchdb: couchdb:3.1
+        peer: hyperledger/fabric-peer:2.2.2
+        alpineutils: index.docker.io/hyperledgerlabs/alpine-utils:1.0
+    annotations:  
+      service:
+        - example1: example2
+      pvc:
+      deployment:
+        
+    peer:
+      name: peer0
+      gossippeeraddress: peer0.hgpeer1-net:7051
+      gossipexternalendpoint: peer0.hgpeer1-net.fabric10.fabrictest.hyperrnd.com:8443
+      localmspid: hgpeer1MSP
+      loglevel: info
+      tlsstatus: true
+      builder: hyperledger/fabric-ccenv:2.2.2
+      couchdb:
+        username: hgpeer1-user
+
+    storage:
+      peer:
+        storageclassname: hgpeer1sc
+        storagesize: 512Mi
+      couchdb:
+        storageclassname: hgpeer1sc
+        storagesize: 1Gi
+
+    vault:
+      role: vault-role
+      address: http://dev1.vaultservice.hyperrnd.com
+      authpath: fabric10hgpeer1-net-auth
+      secretprefix: fabric10/crypto/peerOrganizations/hgpeer1-net/peers/peer0.hgpeer1-net
+      secretambassador: fabric10/crypto/peerOrganizations/hgpeer1-net/ambassador
+      serviceaccountname: vault-auth
+      imagesecretname: regcred
+      secretcouchdbpass: fabric10/credentials/hgpeer1-net/couchdb/hgpeer1?user
+
+    service:
+      servicetype: ClusterIP
+      ports:
+        grpc:
+          clusteripport: 7051
+        events:
+          clusteripport: 7053
+        couchdb:
+          clusteripport: 5984
+          
+    proxy:
+      provider: "haproxy"
+      external_url_suffix: fabric10.fabrictest.hyperrnd.com
