@@ -1,0 +1,23 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: hgrnd1-ptg
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: hgrnd1-ns
+spec:
+  releaseName: hgrnd1-ptg
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-pool-genesis
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+  values:
+    metadata:
+      name: hgrnd1-ptg
+      namespace: hgrnd1-ns
+    organization:
+      name: hgrnd1
+    configmap:
+      poolGenesis: |-
+        {"reqSignature":{},"txn":{"data":{"data":{"alias":"hgrnd-steward-1","blskey":"fqeQsPNmz6kF7P9DidT4m7Q4ERTcvF66KfgvnMAC3yZchRutvb9KFft7t5rKjJp4tZUkZCEsfGSBxEcqeVhs4vksMGkWoDQ432afS6MjWvnBqWxzEwEVJmFzG3frVC96Hp7hiVtetNq3rNKiqxzZytLoy3qgY6cSeVwVvXyBm2cxSH","blskey_pop":"Rb7VGrnH4CDahP3HQDrbytNY4Ua7TRYDZLfEy2gcSNQsYtoV8UxgNWFSrxV9uJK3gigdoucZ6x6D3f3mTZmHKHyeMJmXucVvNNfWniatS8617uEqPTmLRzfeFtR2SysLGvq8URQfnBMCeabV8hKBSgoi4EPDB6tPAakbZW1tim18Dm","client_ip":"184.169.148.180","client_port":9732,"node_ip":"184.169.148.180","node_port":9731,"services":["VALIDATOR"]},"dest":"HqLuoxctUEfUpHdrbGfHbsG1qLs8B5ntSrPrZmwZwTYq"},"metadata":{"from":"XtLwi9SMWMHbYY5EftBJPq"},"type":"0"},"txnMetadata":{"seqNo":1,"txnId":"c4683573aa4435bccd06501994595d8e24c556c2353752d58d61481342e8abc1"},"ver":"1"}
+        {"reqSignature":{},"txn":{"data":{"data":{"alias":"hgrnd-steward-2","blskey":"2dzHX4yH1TxnPRMvoXk8nmKicjm7zZphdr9YnFRJGLHDrdtQqSoHy1vpt9QoSKQuSR5b2dFz1xAggh6LSJ5GPAyqWrVA4ssZ9yeTeWzX9PZz74gaTJ2XWYbx814FbBExjx4CKQ3CQQvC1jGLBt1KPrRPWytueP8hbC3eMn4gAkqsStF","blskey_pop":"Qrkh9vJt4Ajv1eM1mfJvxtm68TexEo8jeaNJjNXLiKyH2QDQvtugV9kTwXTimDQkPBtXqLGfv9HvkwKaSoYr8YWNctPkGyeSQTAxxCj3HWEaSFXmbrGVRthQ8q6LTJcQvtXQFhkkWmFF6Nzx1f3uyu5eJvfXA2GE8ayLSHiawVZ4Fh","client_ip":"184.169.148.180","client_port":9722,"node_ip":"184.169.148.180","node_port":9721,"services":["VALIDATOR"]},"dest":"GHTaKkMpUP9X33fSeG3BEMJY64eWqQ3yVktbhy61TCm7"},"metadata":{"from":"V3RnaBrv1DKpXAzvW1aVmn"},"type":"0"},"txnMetadata":{"seqNo":2,"txnId":"6210b7e692bdc5e2cf88f5fe3790c08d1302e110545957df29d8eccaca56440e"},"ver":"1"}
