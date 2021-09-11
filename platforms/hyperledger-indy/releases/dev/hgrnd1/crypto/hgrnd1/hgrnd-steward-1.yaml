@@ -1,0 +1,31 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: hgrnd1-hgrnd-steward-1
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: hgrnd1-ns
+spec:
+  releaseName: hgrnd1-hgrnd-steward-1
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-key-mgmt
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+  values:
+    metadata:
+      name: hgrnd1-hgrnd-steward-1
+      namespace: hgrnd1-ns
+    network:
+      name: hgrnd1
+    image:
+      name: hgrnd1
+      repository: index.docker.io/hyperledgerlabs/indy-key-mgmt:1.11.0
+      pullSecret: regcred
+    vault:
+      address: http://dev1.vaultservice.hyperrnd.com
+      keyPath: hgrnd1.stewards
+      identity: hgrnd-steward-1
+      auth_path: kubernetes-hgrnd1-admin-auth
+    account:
+      service: hgrnd1-admin-vault-auth
+      role: rw
