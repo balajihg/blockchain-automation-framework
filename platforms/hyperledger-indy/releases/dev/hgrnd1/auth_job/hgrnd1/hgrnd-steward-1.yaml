@@ -1,0 +1,36 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: hgrnd1-hgrnd-steward-1-auth-job
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: hgrnd1-ns
+spec:
+  releaseName: hgrnd1-hgrnd-steward-1-auth-job
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-auth-job
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+  values:
+    metadata:
+      name: hgrnd1-hgrnd-steward-1-auth-job
+      namespace: hgrnd1-ns
+    network:
+      name: hgrnd1
+      kubernetes_url: https://8E06C1591EEC42E34291EE3C8B988449.gr7.us-west-1.eks.amazonaws.com
+    image:
+      name: hgrnd1
+      repository: alpine:3.9.4
+    vault:
+      address: http://dev1.vaultservice.hyperrnd.com
+      keyPath: hgrnd1.stewards
+      identity: hgrnd-steward-1
+      admin_auth_path: kubernetes-hgrnd1-admin-auth
+      policy: hgrnd1-hgrnd-steward-1-ro
+      policy_content: path \"/hgrnd1/stewards/hgrnd-steward-1/*\" { capabilities = [ \"read\", \"list\" ] }
+      auth_path: kubernetes-hgrnd1-hgrnd-steward-1-auth
+    account:
+      admin_service: hgrnd1-admin-vault-auth
+      admin_role: rw
+      service: hgrnd1-hgrnd-steward-1-vault-auth
+      role: ro
