@@ -1,0 +1,101 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: hgrnd1-hgrnd-steward-1-node
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: hgrnd1-ns
+spec:
+  releaseName: hgrnd1-hgrnd-steward-1-node
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-node
+    git: https://github.com/balajihg/blockchain-automation-framework.git
+    ref: main
+  values:
+    metadata:
+      name: hgrnd1-hgrnd-steward-1-node
+      namespace: hgrnd1-ns
+    network:
+      name: hgrnd1
+    organization:
+      name: hgrnd1
+    genesis:
+      add_org: False
+    image:
+      pullSecret: regcred
+      initContainer:
+        name: hgrnd1-hgrnd-steward-1-node-init
+        repository: alpine:3.9.4
+      cli:
+        name: hgrnd1-hgrnd-steward-1-node-ledger-txn
+        repository: index.docker.io/hyperledgerlabs/indy-ledger-txn:latest
+        pullSecret: regcred  
+      indyNode:
+        name: hgrnd1-hgrnd-steward-1-node
+        repository: index.docker.io/hyperledgerlabs/indy-node:1.11.0
+    node:
+      name: hgrnd-steward-1
+      ip: 0.0.0.0
+      publicIp: 184.169.148.180
+      port: 9731
+      ambassadorPort: 9731
+    client:
+      publicIp: 184.169.148.180
+      ip: 0.0.0.0
+      port: 9732
+      ambassadorPort: 9732
+    service:
+      type: ClusterIP
+      ports:
+        nodePort: 9731
+        nodeTargetPort: 9731
+        clientPort: 9732
+        clientTargetPort: 9732
+    configmap:
+      indyConfig: |-
+        NETWORK_NAME = 'hgrnd1'
+        # Enable stdout logging
+        enableStdOutLogging = True
+        logRotationBackupCount = 10
+        # Directory to store ledger.
+        LEDGER_DIR = '/var/lib/indy/data'
+        # Directory to store logs.
+        LOG_DIR = '/var/log/indy'
+        # Directory to store keys.
+        KEYS_DIR = '/var/lib/indy/keys'
+        # Directory to store genesis transactions files.
+        GENESIS_DIR = '/var/lib/indy/genesis'
+        # Directory to store backups.
+        BACKUP_DIR = '/var/lib/indy/backup'
+        # Directory to store plugins.
+        PLUGINS_DIR = '/var/lib/indy/plugins'
+        # Directory to store node info.
+        NODE_INFO_DIR = '/var/lib/indy/data'
+    ambassador:
+      annotations: |-
+        ---
+        apiVersion: ambassador/v2
+        kind: TCPMapping
+        name: hgrnd1-hgrnd-steward-1-node-node-mapping
+        port: 9731
+        service: hgrnd1-hgrnd-steward-1-node.hgrnd1-ns:9731
+        ---
+        apiVersion: ambassador/v2
+        kind: TCPMapping
+        name: hgrnd1-hgrnd-steward-1-node-client-mapping
+        port: 9732
+        service: hgrnd1-hgrnd-steward-1-node.hgrnd1-ns:9732
+    vault:
+      address: http://dev1.vaultservice.hyperrnd.com
+      serviceAccountName: hgrnd1-hgrnd-steward-1-vault-auth
+      keyPath: /keys/hgrnd1/keys/hgrnd-steward-1
+      authPath: kubernetes-hgrnd1-hgrnd-steward-1-auth
+      nodeId: hgrnd-steward-1
+      role: ro
+    storage:
+      data:
+        storagesize: 3Gi
+        storageClassName: hgrnd1-aws-storageclass
+      keys:
+        storagesize: 3Gi
+        storageClassName: hgrnd1-aws-storageclass
